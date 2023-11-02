@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block style %}
+    <style>
+        /* styles.css */
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        }
+
+        .user-profile {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
+        }
+
+        h1 {
+        font-size: 24px;
+        color: #333;
+        }
+
+        .points {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #007bff;
+        }
+
+        .points-value {
+        font-size: 36px;
+        font-weight: bold;
+        }
+
+    </style>
+{% endblock style %}
+
+{% block content %} <main>
+    <section class="user-profile">
+        <h1>Welcome, {{ points.host }}!</h1>
+        <div class="points">
+            <p>Your Points:</p>
+            <span class="points-value">{{ points.total_points }}</span>
+        </div>
+    </section>
+</main>
+{% endblock content %}

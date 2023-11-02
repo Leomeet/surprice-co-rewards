@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-2">
+            <p class="form-control-plaintext">Username: {{ username }}</p>
+        </div>
+        {% if error_message %}
+            <div class="alert alert-danger">
+                {{ error_message }}
+            </div>
+        {% endif %}
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="new_total_points" class="sr-only">New total points:</label>
+            <input type="number" name="total_points" class="form-control" id="new_total_points" required value={{current_point}}>
+        </div>
+        <button type="submit" class="btn btn-success mb-2">Update</button>
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <form method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mt-3">
+        {{ form.user.label_tag }}
+        {{ form.user }}
+      </div>
+    </div>
+    <div class="row">
+      {% for field in form %}
+        {% if field.name != 'user' %}
+          <div class="form-group col-md-6">
+            {{ field.label_tag }}
+            {{ field }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="submit" class="btn btn-primary mt-3">Calculate Total Points</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock content %}

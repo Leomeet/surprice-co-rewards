@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if points %}
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+          <div class="row gx-4 gx-lg-5 justify-content-center">
+            {% for i in points %}
+            <div class="col-12 col-md-6 col-lg-3 mb-5">
+              <div class="card">
+                <div class="card-body p-4">
+                  <div class="text-center">
+                    <h5 class="fw-bolder">{{ i.username }}</h5>
+                    Points - <strong>{{ i.total_points }}</strong>
+                  </div>
+                </div>
+                <!-- Product actions -->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                  {% if i.total_points is not none %}
+                  <div class="d-flex justify-content-between">
+                    <div class="mr-2">
+                      <a href="{% url 'update_points' user_id=i.id username=i.username %}" class="btn btn-outline-success">Update Points</a>
+                    </div>
+                    <div>
+                      <a href="{% url 'delete_points' user_id=i.id username=i.username %}" class="btn btn-outline-danger">Delete Points</a>
+                    </div>
+                  </div>
+                  {% else %}
+                  <a href="/addpoint" class="btn btn-outline-success disabled">Update Points</a>
+                  <a href="/addpoint" class="btn btn-outline-danger disabled">Delete Points</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      
+    {% else %}
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">No Users Found!</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% else %}
+    <p>Please <a href="{% url 'login' %}">log in</a>.</p>
+{% endif %}
+{% endblock content %}

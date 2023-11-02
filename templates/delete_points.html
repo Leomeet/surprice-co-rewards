@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-2">
+            <p class="form-control-plaintext">Username: {{ username }}</p>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="Deducted_points" class="sr-only">Enter Points to deduct:</label>
+            <input type="number" name="total_points" class="form-control" id="Deducted_points" required >
+        </div>
+        <button type="submit" class="btn btn-danger mb-2">Delete points</button>
+    </form>
+</div>
+<div class="container">
+    {% if error_message %}
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
