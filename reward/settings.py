@@ -59,11 +59,14 @@ WSGI_APPLICATION = 'reward.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'abvszfjp',
+        'USER': 'abvszfjp',
+        'PASSWORD': 'Ox2MPHtitWSngCbdlw0Nhf0HDWemOD2R',
+        'HOST': 'trumpet.db.elephantsql.com',
+        'PORT': '',  # Leave it empty for the default PostgreSQL port (5432).
     }
 }
-
 
 STATIC_URL = '/static/'
 
