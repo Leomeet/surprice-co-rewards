@@ -72,15 +72,15 @@ def registerPage(request):
                     messages.error(request, f'Error in {field}: {error}')
     return render(request, 'login_register.html', {'form': form})
 
-def send_api_request(destination,user,current_points,total_points):
+def send_api_request(destination,campaign,parameters):
     url = 'https://backend.aisensy.com/campaign/t1/api/v2'
 
     data = {
         "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWJkYjUyYzY2ZDBiMGI1YmVmMTJhYiIsIm5hbWUiOiJTdXJwcmlzZSBTYW5pdGF0aW9uIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY0YWJkYjUxYzY2ZDBiMGI1YmVmMTJhNCIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNjg4OTg0NDAyfQ.4H0ddPiuhwCLKHrrdkE_Vb-KYQHpK3YMGW0SBfKfX2w",
-        "campaignName": "nitin website",
+        "campaignName": campaign,
         "destination": destination,
         "userName": "info@surprisesanitation.com",
-        "templateParams": [str(user),str(current_points),str(total_points)]
+        "templateParams": parameters
     }
 
     headers = {'Content-Type': 'application/json'}
@@ -120,7 +120,7 @@ def add_point(request):
                 user_points, created = Points.objects.get_or_create(host=user)
                 user_points.total_points = total_points
                 user_points.save()
-                send_api_request(destination="+91"+user.mobile,user=user.username,current_points=calculate_total_points(quantity_data),total_points=total_points)
+                send_api_request(destination="+91"+user.mobile,campaign='nitin website',parameters=[str(user),str(current_points),str(total_points)])
                 
                 return redirect('home')
         else:
@@ -135,8 +135,10 @@ def update_points(request, user_id, username):
         if request.method == 'POST':
             new_points = request.POST.get('total_points')
             form = UpdatePointsForm(request.POST)
+            user_object = CustomUser.objects.get(pk=user_id)
             if form.is_valid():
                 user_points.total_points = new_points
+                send_api_request(destination="+91"+user_object.mobile,campaign='nitin website update points',parameters=[str(user_object.username),str(new_points)])
                 user_points.save()
                 return redirect('home')  
         else:
@@ -148,7 +150,8 @@ def update_points(request, user_id, username):
 def delete_points(request, user_id, username):
     if request.user.is_authenticated:
         user_points = Points.objects.get(host_id=user_id)
-        error_message = None  
+        error_message = None
+        user_object = CustomUser.objects.get(pk=user_id)
         if request.method == 'POST':
             new_points = int(request.POST.get('total_points'))
             form = UpdatePointsForm(request.POST)
@@ -157,6 +160,8 @@ def delete_points(request, user_id, username):
                     error_message = "New points cannot exceed total points."
                 else:
                     user_points.total_points -= new_points
+                    send_api_request(destination="+91"+user_object.mobile,campaign='nitin website delete website',parameters=[str(user_object.username),str(new_points),str(user_points.total_points)])
+
                     user_points.save()
                     return redirect('home')  
         form = UpdatePointsForm(instance=user_points)
