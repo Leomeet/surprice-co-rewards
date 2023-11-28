@@ -77,7 +77,7 @@ def send_api_request(destination,user,current_points,total_points):
 
     data = {
         "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWJkYjUyYzY2ZDBiMGI1YmVmMTJhYiIsIm5hbWUiOiJTdXJwcmlzZSBTYW5pdGF0aW9uIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY0YWJkYjUxYzY2ZDBiMGI1YmVmMTJhNCIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNjg4OTg0NDAyfQ.4H0ddPiuhwCLKHrrdkE_Vb-KYQHpK3YMGW0SBfKfX2w",
-        "campaignName": "Nitin Website",
+        "campaignName": "nitin website",
         "destination": destination,
         "userName": "info@surprisesanitation.com",
         "templateParams": [str(user),str(current_points),str(total_points)]
