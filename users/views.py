@@ -120,7 +120,7 @@ def add_point(request):
                 user_points, created = Points.objects.get_or_create(host=user)
                 user_points.total_points = total_points
                 user_points.save()
-                send_api_request(destination="+91"+user.mobile,campaign='nitin website',parameters=[str(user),str(current_points),str(total_points)])
+                send_api_request(destination="+91"+user.mobile,campaign='surprise rewards add',parameters=[str(user),str(current_points),str(total_points)])
                 
                 return redirect('home')
         else:
@@ -138,7 +138,7 @@ def update_points(request, user_id, username):
             user_object = CustomUser.objects.get(pk=user_id)
             if form.is_valid():
                 user_points.total_points = new_points
-                send_api_request(destination="+91"+user_object.mobile,campaign='nitin website update points',parameters=[str(user_object.username),str(new_points)])
+                send_api_request(destination="+91"+user_object.mobile,campaign='surprise rewards update',parameters=[str(user_object.username),str(new_points)])
                 user_points.save()
                 return redirect('home')  
         else:
@@ -160,7 +160,7 @@ def delete_points(request, user_id, username):
                     error_message = "New points cannot exceed total points."
                 else:
                     user_points.total_points -= new_points
-                    send_api_request(destination="+91"+user_object.mobile,campaign='nitin website delete website',parameters=[str(user_object.username),str(new_points),str(user_points.total_points)])
+                    send_api_request(destination="+91"+user_object.mobile,campaign='surprise rewards delete',parameters=[str(user_object.username),str(new_points),str(user_points.total_points)])
 
                     user_points.save()
                     return redirect('home')  
