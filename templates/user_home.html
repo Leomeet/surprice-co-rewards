@@ -1,52 +1,197 @@
 {% extends "base.html" %}
 
 {% block style %}
-    <style>
-        /* styles.css */
-        body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        margin: 0;
-        padding: 0;
-        }
+<style>
+  .hero-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .user-profile {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 400px;
-        margin: 0 auto;
-        margin-top: 50px;
-        }
+  /* Ambient blobs */
+  .hero-wrap::before {
+    content: '';
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
 
-        h1 {
-        font-size: 24px;
-        color: #333;
-        }
+  .profile-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 52px 48px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
 
-        .points {
-        margin-top: 20px;
-        font-size: 18px;
-        color: #007bff;
-        }
+  .avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(96,165,250,0.3);
+  }
 
-        .points-value {
-        font-size: 36px;
-        font-weight: bold;
-        }
+  .welcome-greeting {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
 
-    </style>
+  .welcome-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 36px;
+  }
+
+  /* Divider */
+  .card-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 -48px 36px;
+  }
+
+  .points-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+
+  .points-display {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    animation: fadeUp 0.6s ease-out;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .points-unit {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 36px;
+    letter-spacing: 0.5px;
+  }
+
+  .info-chips {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .info-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50px;
+    padding: 7px 16px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .info-chip i { font-size: 0.7rem; }
+
+  .no-points-msg {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: #fbbf24;
+    font-size: 0.85rem;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 480px) {
+    .profile-card { padding: 40px 28px; }
+    .card-divider { margin: 0 -28px 28px; }
+    .points-display { font-size: 4rem; }
+  }
+</style>
 {% endblock style %}
 
-{% block content %} <main>
-    <section class="user-profile">
-        <h1>Welcome, {{ points.host }}!</h1>
-        <div class="points">
-            <p>Your Points:</p>
-            <span class="points-value">{{ points.total_points }}</span>
-        </div>
-    </section>
-</main>
+{% block content %}
+<div class="hero-wrap">
+  <div class="profile-card">
+
+    {% if points %}
+    <div class="avatar-large">{{ points.host|first }}</div>
+    <div class="welcome-greeting">Welcome back</div>
+    <div class="welcome-name">{{ points.host }}</div>
+
+    <div class="card-divider"></div>
+
+    <div class="points-label"><i class="fas fa-star me-1" style="color:#a78bfa;"></i>Reward Points</div>
+    <div class="points-display">{{ points.total_points }}</div>
+    <div class="points-unit">points earned</div>
+
+    <div class="info-chips">
+      <div class="info-chip">
+        <i class="fas fa-circle" style="color:#34d399;"></i>
+        Active Member
+      </div>
+      <div class="info-chip">
+        <i class="fas fa-shield-halved" style="color:#60a5fa;"></i>
+        Verified
+      </div>
+    </div>
+
+    {% else %}
+    <div class="avatar-large"><i class="fas fa-user" style="font-size:1.8rem;"></i></div>
+    <div class="welcome-greeting">Welcome back</div>
+    <div class="welcome-name">{{ request.user.username }}</div>
+
+    <div class="card-divider"></div>
+
+    <div class="points-label">Reward Points</div>
+    <div class="points-display">0</div>
+    <div class="points-unit">points earned</div>
+
+    <div class="no-points-msg">
+      <i class="fas fa-info-circle me-2"></i>
+      You don't have any points yet. Points will appear here once awarded by your admin.
+    </div>
+    {% endif %}
+
+  </div>
+</div>
 {% endblock content %}

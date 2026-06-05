@@ -20,7 +20,7 @@ class UserPointsForm(forms.Form):
         for item in items:
             field_name = f'quantity_{item.id}'
             label = item.name
-            widget = forms.NumberInput(attrs={'class': 'form-control'})
+            widget = forms.NumberInput(attrs={'placeholder': '0', 'min': '0'})
             initial = 0
             min_value = 0
             max_value = 100000  # Adjust the maximum quantity as needed

@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zpwc6ht_2-pz-)j+e5_qx$fhwyi!qn0&!p#739*lamgsq0+y&^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True  # Set to False for production / Vercel deployment
 
 ALLOWED_HOSTS = ["*",".vercel.app"]
 
@@ -59,14 +59,22 @@ WSGI_APPLICATION = 'reward.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'abvszfjp',
-        'USER': 'abvszfjp',
-        'PASSWORD': 'Ox2MPHtitWSngCbdlw0Nhf0HDWemOD2R',
-        'HOST': 'trumpet.db.elephantsql.com',
-        'PORT': '',  # Leave it empty for the default PostgreSQL port (5432).
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# For production PostgreSQL, replace the above with:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': os.environ.get('DB_PORT', '5432'),
+#     }
+# }
 
 
 STATICFILES_DIRS = (

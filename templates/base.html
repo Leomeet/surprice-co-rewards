@@ -4,51 +4,246 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Nexo-Euro Mica Rewards</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #0f0c29 0%, #1a1a4e 40%, #0f3460 100%);
+        background-attachment: fixed;
+        color: #e2e8f0;
+      }
+
+      /* ── Navbar ── */
+      .glass-nav {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .glass-nav .navbar-brand {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #fff !important;
+        letter-spacing: 0.3px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-icon {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+
+      .glass-nav .nav-link {
+        color: rgba(255,255,255,0.7) !important;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 6px 14px !important;
+        border-radius: 8px;
+        transition: all 0.2s;
+      }
+      .glass-nav .nav-link:hover {
+        color: #fff !important;
+        background: rgba(255,255,255,0.08);
+      }
+
+      .search-glass {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #fff;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.88rem;
+        padding: 7px 14px;
+        outline: none;
+        transition: all 0.2s;
+        min-width: 200px;
+      }
+      .search-glass::placeholder { color: rgba(255,255,255,0.35); }
+      .search-glass:focus {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(96,165,250,0.6);
+        box-shadow: 0 0 0 3px rgba(96,165,250,0.15);
+        color: #fff;
+      }
+
+      .btn-nav-search {
+        background: linear-gradient(135deg, #60a5fa, #818cf8);
+        border: none;
+        color: #fff;
+        border-radius: 10px;
+        padding: 7px 14px;
+        font-size: 0.85rem;
+        transition: opacity 0.2s;
+      }
+      .btn-nav-search:hover { opacity: 0.85; color: #fff; }
+
+      .btn-logout {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-radius: 10px;
+        padding: 6px 16px;
+        transition: all 0.2s;
+      }
+      .btn-logout:hover {
+        background: rgba(239, 68, 68, 0.25);
+        color: #fff;
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      .btn-login-nav {
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-radius: 10px;
+        padding: 6px 18px;
+        transition: opacity 0.2s;
+      }
+      .btn-login-nav:hover { opacity: 0.85; color: #fff; }
+
+      .user-badge {
+        font-size: 0.82rem;
+        color: rgba(255,255,255,0.45);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .navbar-toggler {
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 4px 8px;
+      }
+      .navbar-toggler-icon { filter: invert(1); }
+
+      /* ── Global glass card ── */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      }
+
+      /* ── Shared buttons ── */
+      .btn-primary-glass {
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 8px 20px;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.15s;
+        font-size: 0.9rem;
+      }
+      .btn-primary-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+
+      .btn-success-glass {
+        background: linear-gradient(135deg, #34d399, #059669);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 8px 20px;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.15s;
+        font-size: 0.9rem;
+      }
+      .btn-success-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+
+      .btn-danger-glass {
+        background: linear-gradient(135deg, #f87171, #dc2626);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 8px 20px;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.15s;
+        font-size: 0.9rem;
+      }
+      .btn-danger-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+    </style>
     {% block style %}{% endblock style %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Nexo-Euro Mica Rewards</a>
-        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+    <nav class="navbar navbar-expand-lg glass-nav">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand" href="/">
+          <div class="brand-icon"><i class="fas fa-star"></i></div>
+          Nexo-Euro Mica
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbarSupportedContent" style="">
+        <div class="collapse navbar-collapse" id="navbarMain">
           {% if user.is_superuser %}
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto gap-1 ms-2">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link" href="/"><i class="fas fa-grid-2 me-1"></i>Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/addpoint">Add point</a>
+              <a class="nav-link" href="/addpoint"><i class="fas fa-circle-plus me-1"></i>Add Points</a>
             </li>
           </ul>
-          <ul class="navbar-nav ml-auto">
-            <form class="form-inline my-2 my-lg-0 mr-5" action="{% url 'home' %}" method="GET">
-              <div class="input-group">
-                <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </div>
-            </form>
-          </ul>
-          {% endif %}
-          {% if request.user.is_authenticated %}
-          <ul class="navbar-nav ml-auto" style="margin-left:13px">
-            <li class="nav-item my-2 my-lg-0 mr-5"><a class="btn btn-outline-danger" href="{% url 'logout' %}">Logout</a></li>
-          </ul>
+          <form class="d-flex me-3 my-2 my-lg-0" action="{% url 'home' %}" method="GET">
+            <div class="d-flex gap-2">
+              <input class="search-glass" type="search" name="search" placeholder="Search users…">
+              <button class="btn-nav-search" type="submit"><i class="fas fa-magnifying-glass"></i></button>
+            </div>
+          </form>
           {% else %}
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item my-2 my-lg-0 mr-5"><a class="btn btn-outline-success" href="{% url 'login' %}">Login</a></li>
+          <ul class="navbar-nav me-auto ms-2">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a>
+            </li>
           </ul>
           {% endif %}
+
+          <div class="d-flex align-items-center gap-3 my-2 my-lg-0">
+            {% if request.user.is_authenticated %}
+            <span class="user-badge">
+              <i class="fas fa-circle-user"></i>{{ request.user.username }}
+            </span>
+            <a class="btn-logout" href="{% url 'logout' %}"><i class="fas fa-right-from-bracket me-1"></i>Logout</a>
+            {% else %}
+            <a class="btn-login-nav" href="{% url 'login' %}"><i class="fas fa-right-to-bracket me-1"></i>Login</a>
+            {% endif %}
+          </div>
         </div>
       </div>
     </nav>
 
-    {% block content %}
-    {% endblock content %}
+    {% block content %}{% endblock content %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

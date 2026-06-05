@@ -1,62 +1,398 @@
 {% extends "base.html" %}
 
+{% block style %}
+<style>
+  .page-wrapper {
+    padding: 40px 20px 60px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .page-title .title-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .page-subtitle {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.88rem;
+    margin-left: 54px;
+  }
+
+  /* ── User cards grid ── */
+  .users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .user-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .user-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .user-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+
+  .user-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .user-info { flex: 1; min-width: 0; }
+
+  .user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-role {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1px;
+  }
+
+  .points-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .points-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .points-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .points-icon {
+    font-size: 1.4rem;
+    opacity: 0.3;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-card-update {
+    flex: 1;
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    color: #34d399;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-card-update:hover {
+    background: rgba(52, 211, 153, 0.22);
+    border-color: rgba(52, 211, 153, 0.5);
+    color: #6ee7b7;
+    transform: translateY(-1px);
+  }
+
+  .btn-card-delete {
+    flex: 1;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    color: #f87171;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-card-delete:hover {
+    background: rgba(248, 113, 113, 0.22);
+    border-color: rgba(248, 113, 113, 0.5);
+    color: #fca5a5;
+    transform: translateY(-1px);
+  }
+
+  .btn-card-disabled {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+  }
+
+  .empty-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+
+  .empty-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .btn-add-first {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    padding: 10px 24px;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .btn-add-first:hover { opacity: 0.85; transform: translateY(-1px); color: #fff; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stat-chip-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .stat-chip-val {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .stat-chip-lbl {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+</style>
+{% endblock style %}
 
 {% block content %}
 {% if user.is_authenticated %}
+<div class="page-wrapper">
+  <div class="container-fluid px-2 px-md-3">
+
+    <div class="page-header">
+      <div class="page-title">
+        <div class="title-icon"><i class="fas fa-users"></i></div>
+        User Dashboard
+      </div>
+      <div class="page-subtitle">Manage member reward points</div>
+    </div>
+
     {% if points %}
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-          <div class="row gx-4 gx-lg-5 justify-content-center">
-            {% for i in points %}
-            <div class="col-12 col-md-6 col-lg-3 mb-5">
-              <div class="card">
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <h5 class="fw-bolder">{{ i.username }}</h5>
-                    Points - <strong>{{ i.total_points }}</strong>
-                  </div>
-                </div>
-                <!-- Product actions -->
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  {% if i.total_points is not none %}
-                  <div class="d-flex justify-content-between">
-                    <div class="mr-2">
-                      <a href="{% url 'update_points' user_id=i.id username=i.username %}" class="btn btn-outline-success">Update Points</a>
-                    </div>
-                    <div>
-                      <a href="{% url 'delete_points' user_id=i.id username=i.username %}" class="btn btn-outline-danger">Delete Points</a>
-                    </div>
-                  </div>
-                  {% else %}
-                  <a href="/addpoint" class="btn btn-outline-success disabled">Update Points</a>
-                  <a href="/addpoint" class="btn btn-outline-danger disabled">Delete Points</a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-            {% endfor %}
+    <div class="stats-bar">
+      <div class="stat-chip">
+        <div class="stat-chip-icon" style="background:rgba(96,165,250,0.15);">
+          <i class="fas fa-users" style="color:#60a5fa;"></i>
+        </div>
+        <div>
+          <div class="stat-chip-val">{{ points|length }}</div>
+          <div class="stat-chip-lbl">Total Members</div>
+        </div>
+      </div>
+      <a href="/addpoint" style="text-decoration:none;">
+        <div class="stat-chip" style="cursor:pointer; border-color:rgba(96,165,250,0.25);">
+          <div class="stat-chip-icon" style="background:linear-gradient(135deg,#60a5fa,#a78bfa);">
+            <i class="fas fa-plus" style="color:#fff;"></i>
+          </div>
+          <div>
+            <div class="stat-chip-val" style="font-size:0.9rem; color:#60a5fa;">Add Points</div>
+            <div class="stat-chip-lbl">Award a member</div>
           </div>
         </div>
-      </section>
-      
-    {% else %}
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">No Users Found!</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </a>
+    </div>
+
+    <div class="users-grid">
+      {% for i in points %}
+      <div class="user-card">
+        <div class="card-top">
+          <div class="avatar">{{ i.username|first }}</div>
+          <div class="user-info">
+            <div class="user-name">{{ i.username }}</div>
+            <div class="user-role">Rewards Member</div>
+          </div>
         </div>
-    </section>
+
+        <div class="points-section">
+          <div>
+            <div class="points-label">Total Points</div>
+            <div class="points-value">{% if i.total_points %}{{ i.total_points }}{% else %}0{% endif %}</div>
+          </div>
+          <i class="fas fa-star points-icon" style="color:#a78bfa;"></i>
+        </div>
+
+        <div class="card-actions">
+          {% if i.total_points is not none %}
+          <a href="{% url 'update_points' user_id=i.id username=i.username %}" class="btn-card-update">
+            <i class="fas fa-pen"></i> Update
+          </a>
+          <a href="{% url 'delete_points' user_id=i.id username=i.username %}" class="btn-card-delete">
+            <i class="fas fa-minus-circle"></i> Deduct
+          </a>
+          {% else %}
+          <span class="btn-card-disabled"><i class="fas fa-pen"></i> Update</span>
+          <span class="btn-card-disabled"><i class="fas fa-minus-circle"></i> Deduct</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
+      <div class="empty-title">No members found</div>
+      <div class="empty-sub">Register users or try a different search</div>
+      <a href="/addpoint" class="btn-add-first"><i class="fas fa-plus"></i>Add First Points</a>
+    </div>
     {% endif %}
+
+  </div>
+</div>
 {% else %}
-    <p>Please <a href="{% url 'login' %}">log in</a>.</p>
+<div style="text-align:center; padding:80px 20px; color:rgba(255,255,255,0.5);">
+  Please <a href="{% url 'login' %}" style="color:#60a5fa;">log in</a> to continue.
+</div>
 {% endif %}
 {% endblock content %}

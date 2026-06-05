@@ -1,22 +1,256 @@
 {% extends "base.html" %}
 
+{% block style %}
+<style>
+  .form-page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+  }
+
+  .form-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  .form-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .form-header-icon {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, #34d399, #059669);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .form-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
+  .form-desc { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .form-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 -36px 28px;
+  }
+
+  /* Member info chip */
+  .member-chip {
+    background: rgba(52, 211, 153, 0.08);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .member-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #34d399, #059669);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .member-info-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .member-info-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Current points display */
+  .current-pts-row {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .current-pts-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .current-pts-val {
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .field-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .glass-input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 13px 16px;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
+  }
+
+  .glass-input:focus {
+    border-color: rgba(52, 211, 153, 0.6);
+    background: rgba(255,255,255,0.09);
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.12);
+  }
+
+  /* Remove spinner arrows */
+  .glass-input::-webkit-inner-spin-button,
+  .glass-input::-webkit-outer-spin-button { opacity: 1; }
+
+  .action-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .btn-update {
+    flex: 1;
+    background: linear-gradient(135deg, #34d399, #059669);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    padding: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-update:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-back {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .btn-back:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+  }
+
+  @media (max-width: 480px) {
+    .form-card { padding: 32px 20px; }
+    .form-divider { margin: 0 -20px 24px; }
+  }
+</style>
+{% endblock style %}
+
 {% block content %}
-<div class="container mt-5">
-    <form class="form-inline" method="post">
-        {% csrf_token %}
-        <div class="form-group mb-2">
-            <p class="form-control-plaintext">Username: {{ username }}</p>
-        </div>
-        {% if error_message %}
-            <div class="alert alert-danger">
-                {{ error_message }}
-            </div>
-        {% endif %}
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="new_total_points" class="sr-only">New total points:</label>
-            <input type="number" name="total_points" class="form-control" id="new_total_points" required value={{current_point}}>
-        </div>
-        <button type="submit" class="btn btn-success mb-2">Update</button>
+<div class="form-page">
+  <div class="form-card">
+
+    <div class="form-header">
+      <div class="form-header-icon"><i class="fas fa-pen"></i></div>
+      <div>
+        <div class="form-title">Update Points</div>
+        <div class="form-desc">Set a new total for this member</div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <div class="member-chip">
+      <div class="member-avatar">{{ username|first }}</div>
+      <div>
+        <div class="member-info-label">Member</div>
+        <div class="member-info-name">{{ username }}</div>
+      </div>
+    </div>
+
+    <div class="current-pts-row">
+      <div class="current-pts-label">Current Points</div>
+      <div class="current-pts-val">{{ current_point }}</div>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      <label class="field-label"><i class="fas fa-star me-1" style="color:#34d399;"></i>New Total Points</label>
+      <input
+        type="number"
+        name="total_points"
+        class="glass-input"
+        value="{{ current_point }}"
+        min="0"
+        required
+        placeholder="Enter new points total"
+      >
+      <div class="action-row">
+        <button type="submit" class="btn-update">
+          <i class="fas fa-check"></i> Save Changes
+        </button>
+        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
     </form>
+
+  </div>
 </div>
 {% endblock content %}

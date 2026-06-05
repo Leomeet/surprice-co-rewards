@@ -1,29 +1,292 @@
 {% extends "base.html" %}
+
+{% block style %}
+<style>
+  .form-page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 20px 60px;
+  }
+
+  .form-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 640px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  .form-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .form-header-icon {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .form-header-text .form-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .form-header-text .form-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  .form-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 -36px 28px;
+  }
+
+  /* User select section */
+  .section-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Style all form elements Django outputs */
+  .glass-form select,
+  .glass-form input[type="number"],
+  .glass-form input[type="text"] {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 11px;
+    padding: 11px 14px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .glass-form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.4)' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .glass-form select option {
+    background: #1a1a4e;
+    color: #fff;
+  }
+
+  .glass-form select:focus,
+  .glass-form input[type="number"]:focus,
+  .glass-form input[type="text"]:focus {
+    border-color: rgba(96,165,250,0.6);
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 0 3px rgba(96,165,250,0.12);
+  }
+
+  .glass-form label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 6px;
+  }
+
+  .user-select-wrap { margin-bottom: 28px; }
+
+  /* Products grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .product-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .product-item:hover { border-color: rgba(96,165,250,0.25); }
+
+  .product-item label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .product-item label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    flex-shrink: 0;
+  }
+
+  .product-item input[type="number"] {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9px;
+    padding: 9px 12px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .product-item input[type="number"]:focus {
+    border-color: rgba(96,165,250,0.6);
+    box-shadow: 0 0 0 3px rgba(96,165,250,0.1);
+  }
+
+  .product-item input[type="number"]::placeholder { color: rgba(255,255,255,0.25); }
+
+  /* Remove spinner */
+  .product-item input[type="number"]::-webkit-inner-spin-button,
+  .product-item input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+
+  .submit-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    padding: 13px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-cancel {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    padding: 12px 24px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+  }
+
+  @media (max-width: 560px) {
+    .form-card { padding: 32px 20px; }
+    .form-divider { margin: 0 -20px 24px; }
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock style %}
+
 {% block content %}
-<div class="container">
-  <form method="post">
-    {% csrf_token %}
-    <div class="row">
-      <div class="col-md-6 mt-3">
+<div class="form-page">
+  <div class="form-card">
+
+    <div class="form-header">
+      <div class="form-header-icon"><i class="fas fa-circle-plus"></i></div>
+      <div class="form-header-text">
+        <div class="form-title">Award Points</div>
+        <div class="form-desc">Select a member and choose products to award</div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <form method="POST" class="glass-form">
+      {% csrf_token %}
+
+      <div class="section-label"><i class="fas fa-user me-1"></i>Select Member</div>
+      <div class="user-select-wrap">
         {{ form.user.label_tag }}
         {{ form.user }}
       </div>
-    </div>
-    <div class="row">
-      {% for field in form %}
-        {% if field.name != 'user' %}
-          <div class="form-group col-md-6">
+
+      <div class="section-label"><i class="fas fa-box me-1"></i>Products &amp; Quantities</div>
+      <div class="products-grid">
+        {% for field in form %}
+          {% if field.name != 'user' %}
+          <div class="product-item">
             {{ field.label_tag }}
             {{ field }}
           </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <button type="submit" class="btn btn-primary mt-3">Calculate Total Points</button>
+          {% endif %}
+        {% endfor %}
       </div>
-    </div>
-  </form>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-star"></i> Award Points
+        </button>
+        <a href="/" class="btn-cancel">
+          <i class="fas fa-xmark"></i> Cancel
+        </a>
+      </div>
+    </form>
+
+  </div>
 </div>
 {% endblock content %}
