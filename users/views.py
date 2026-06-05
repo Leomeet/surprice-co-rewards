@@ -7,6 +7,7 @@ from django.db.models import Sum, Q
 from .forms import UserPointsForm,UpdatePointsForm,CustomRegistrationForm
 from django.core.exceptions import ObjectDoesNotExist
 import requests
+import os
 
 def index(request):
     if request.user.is_authenticated:
@@ -76,10 +77,10 @@ def send_api_request(destination,campaign,parameters):
     url = 'https://backend.aisensy.com/campaign/t1/api/v2'
 
     data = {
-        "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWJkYjUyYzY2ZDBiMGI1YmVmMTJhYiIsIm5hbWUiOiJTdXJwcmlzZSBTYW5pdGF0aW9uIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY0YWJkYjUxYzY2ZDBiMGI1YmVmMTJhNCIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNjg4OTg0NDAyfQ.4H0ddPiuhwCLKHrrdkE_Vb-KYQHpK3YMGW0SBfKfX2w",
+        "apiKey": os.environ.get('AISENSY_API_KEY', ''),
         "campaignName": campaign,
         "destination": destination,
-        "userName": "info@surprisesanitation.com",
+        "userName": os.environ.get('AISENSY_USERNAME', ''),
         "templateParams": parameters
     }
 
