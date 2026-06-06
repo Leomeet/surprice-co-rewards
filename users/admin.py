@@ -1,8 +1,5 @@
 from django.contrib import admin
-from .models import *
+from .models import CustomUser, Points
 
-# Register your models here.
-
-admin.site.register(Points)
-admin.site.register(Product)
 admin.site.register(CustomUser)
+admin.site.register(Points)

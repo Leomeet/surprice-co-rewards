@@ -6,24 +6,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Nexo-Euro Mica Rewards</title>
+    <title>Surprise Co. Rewards</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       html, body {
         min-height: 100vh;
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #0f0c29 0%, #1a1a4e 40%, #0f3460 100%);
+        background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 45%, #f0f9ff 100%);
         background-attachment: fixed;
-        color: #e2e8f0;
+        color: #42506b;
       }
+
+      /* Soft ambient glow behind everything */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(620px circle at 12% 8%, rgba(59,130,246,0.12), transparent 60%),
+          radial-gradient(560px circle at 88% 92%, rgba(99,102,241,0.12), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      nav, .page-wrapper, .form-page, .hero-wrap { position: relative; z-index: 1; }
 
       /* ── Navbar ── */
       .glass-nav {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border-bottom: 1px solid rgba(59, 130, 246, 0.12);
+        box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08);
         padding: 10px 0;
         position: sticky;
         top: 0;
@@ -33,7 +47,7 @@
       .glass-nav .navbar-brand {
         font-weight: 700;
         font-size: 1.15rem;
-        color: #fff !important;
+        color: #1e2a4a !important;
         letter-spacing: 0.3px;
         display: flex;
         align-items: center;
@@ -43,17 +57,19 @@
       .brand-icon {
         width: 32px;
         height: 32px;
-        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
+        color: #fff;
         font-size: 0.85rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
       }
 
       .glass-nav .nav-link {
-        color: rgba(255,255,255,0.7) !important;
+        color: #5a6a8a !important;
         font-weight: 500;
         font-size: 0.9rem;
         padding: 6px 14px !important;
@@ -61,14 +77,14 @@
         transition: all 0.2s;
       }
       .glass-nav .nav-link:hover {
-        color: #fff !important;
-        background: rgba(255,255,255,0.08);
+        color: #3b82f6 !important;
+        background: rgba(59, 130, 246, 0.1);
       }
 
       .search-glass {
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: #fff;
+        background: rgba(255,255,255,0.6);
+        border: 1px solid rgba(59, 130, 246, 0.18);
+        color: #26344f;
         border-radius: 10px;
         font-family: 'Poppins', sans-serif;
         font-size: 0.88rem;
@@ -77,16 +93,16 @@
         transition: all 0.2s;
         min-width: 200px;
       }
-      .search-glass::placeholder { color: rgba(255,255,255,0.35); }
+      .search-glass::placeholder { color: rgba(66, 80, 107, 0.4); }
       .search-glass:focus {
-        background: rgba(255,255,255,0.1);
-        border-color: rgba(96,165,250,0.6);
-        box-shadow: 0 0 0 3px rgba(96,165,250,0.15);
-        color: #fff;
+        background: rgba(255,255,255,0.85);
+        border-color: rgba(59, 130, 246, 0.55);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        color: #26344f;
       }
 
       .btn-nav-search {
-        background: linear-gradient(135deg, #60a5fa, #818cf8);
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
         border: none;
         color: #fff;
         border-radius: 10px;
@@ -94,12 +110,12 @@
         font-size: 0.85rem;
         transition: opacity 0.2s;
       }
-      .btn-nav-search:hover { opacity: 0.85; color: #fff; }
+      .btn-nav-search:hover { opacity: 0.88; color: #fff; }
 
       .btn-logout {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #fca5a5;
+        background: rgba(244, 63, 94, 0.1);
+        border: 1px solid rgba(244, 63, 94, 0.25);
+        color: #e11d48;
         font-weight: 600;
         font-size: 0.85rem;
         border-radius: 10px;
@@ -107,50 +123,50 @@
         transition: all 0.2s;
       }
       .btn-logout:hover {
-        background: rgba(239, 68, 68, 0.25);
-        color: #fff;
-        border-color: rgba(239, 68, 68, 0.5);
+        background: rgba(244, 63, 94, 0.18);
+        color: #be123c;
+        border-color: rgba(244, 63, 94, 0.45);
       }
 
       .btn-login-nav {
-        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
         border: none;
         color: #fff;
         font-weight: 600;
         font-size: 0.85rem;
         border-radius: 10px;
         padding: 6px 18px;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
         transition: opacity 0.2s;
       }
-      .btn-login-nav:hover { opacity: 0.85; color: #fff; }
+      .btn-login-nav:hover { opacity: 0.88; color: #fff; }
 
       .user-badge {
         font-size: 0.82rem;
-        color: rgba(255,255,255,0.45);
+        color: #7e8cab;
         display: flex;
         align-items: center;
         gap: 6px;
       }
 
       .navbar-toggler {
-        border: 1px solid rgba(255,255,255,0.2);
+        border: 1px solid rgba(59, 130, 246, 0.25);
         padding: 4px 8px;
       }
-      .navbar-toggler-icon { filter: invert(1); }
 
       /* ── Global glass card ── */
       .glass-card {
-        background: rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(20px) saturate(160%);
+        -webkit-backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.7);
         border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
       }
 
       /* ── Shared buttons ── */
       .btn-primary-glass {
-        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
         border: none;
         color: #fff;
         font-weight: 600;
@@ -158,10 +174,11 @@
         padding: 8px 20px;
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
         transition: opacity 0.2s, transform 0.15s;
         font-size: 0.9rem;
       }
-      .btn-primary-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+      .btn-primary-glass:hover { opacity: 0.9; transform: translateY(-1px); color: #fff; }
 
       .btn-success-glass {
         background: linear-gradient(135deg, #34d399, #059669);
@@ -172,13 +189,14 @@
         padding: 8px 20px;
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
         transition: opacity 0.2s, transform 0.15s;
         font-size: 0.9rem;
       }
-      .btn-success-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+      .btn-success-glass:hover { opacity: 0.9; transform: translateY(-1px); color: #fff; }
 
       .btn-danger-glass {
-        background: linear-gradient(135deg, #f87171, #dc2626);
+        background: linear-gradient(135deg, #fb7185, #e11d48);
         border: none;
         color: #fff;
         font-weight: 600;
@@ -186,10 +204,11 @@
         padding: 8px 20px;
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
+        box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3);
         transition: opacity 0.2s, transform 0.15s;
         font-size: 0.9rem;
       }
-      .btn-danger-glass:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+      .btn-danger-glass:hover { opacity: 0.9; transform: translateY(-1px); color: #fff; }
     </style>
     {% block style %}{% endblock style %}
   </head>
@@ -198,8 +217,8 @@
     <nav class="navbar navbar-expand-lg glass-nav">
       <div class="container-fluid px-4">
         <a class="navbar-brand" href="/">
-          <div class="brand-icon"><i class="fas fa-star"></i></div>
-          Nexo-Euro Mica
+          <div class="brand-icon"><i class="fas fa-gift"></i></div>
+          Surprise Co.
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -211,7 +230,13 @@
               <a class="nav-link" href="/"><i class="fas fa-grid-2 me-1"></i>Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/addpoint"><i class="fas fa-circle-plus me-1"></i>Add Points</a>
+              <a class="nav-link" href="{% url 'billing:product_list' %}"><i class="fas fa-box me-1"></i>Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'billing:bill_list' %}"><i class="fas fa-file-invoice me-1"></i>Bills</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'create_user' %}"><i class="fas fa-user-plus me-1"></i>Add Member</a>
             </li>
           </ul>
           <form class="d-flex me-3 my-2 my-lg-0" action="{% url 'home' %}" method="GET">

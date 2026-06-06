@@ -2,306 +2,80 @@
 
 {% block style %}
 <style>
-  .page-wrapper {
-    padding: 40px 20px 60px;
-    min-height: calc(100vh - 60px);
-  }
+  .page-wrapper { padding: 40px 20px 60px; min-height: calc(100vh - 60px); }
+  .page-title { font-size: 1.75rem; font-weight: 700; color: #1e2a4a; display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .title-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #3b82f6, #6366f1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; flex-shrink: 0; box-shadow: 0 6px 18px rgba(59,130,246,.35); }
+  .page-subtitle { color: #7e8cab; font-size: .88rem; margin-left: 54px; }
+  .stats-bar { display: flex; gap: 16px; margin: 28px 0; flex-wrap: wrap; align-items: center; }
+  .stat-chip { background: rgba(255,255,255,.55); backdrop-filter: blur(16px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 12px; padding: 10px 18px; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(59,130,246,.1); }
+  .stat-chip-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .85rem; }
+  .stat-chip-val { font-size: 1.1rem; font-weight: 700; color: #1e2a4a; }
+  .stat-chip-lbl { font-size: .72rem; color: #8493b0; text-transform: uppercase; letter-spacing: .6px; }
+  .view-toggle { display: inline-flex; margin-left: auto; align-self: center; background: rgba(255,255,255,.55); backdrop-filter: blur(16px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 12px; padding: 4px; gap: 4px; box-shadow: 0 6px 20px rgba(59,130,246,.1); }
+  .view-toggle button { border: none; background: transparent; color: #7e8cab; font-family: 'Poppins',sans-serif; font-size: .82rem; font-weight: 600; border-radius: 9px; padding: 7px 16px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all .2s; }
+  .view-toggle button:hover { color: #3b82f6; }
+  .view-toggle button.active { background: linear-gradient(135deg,#3b82f6,#6366f1); color: #fff; box-shadow: 0 4px 12px rgba(59,130,246,.3); }
+  .is-hidden { display: none !important; }
 
-  .page-header {
-    margin-bottom: 36px;
-  }
+  .users-table-wrap { background: rgba(255,255,255,.55); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 20px; box-shadow: 0 8px 28px rgba(59,130,246,.12); overflow: hidden; }
+  .users-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  .users-table thead th { text-align: left; padding: 16px 18px; font-size: .72rem; text-transform: uppercase; letter-spacing: .6px; color: #8493b0; font-weight: 600; background: rgba(59,130,246,.05); border-bottom: 1px solid rgba(59,130,246,.1); }
+  .users-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(59,130,246,.07); color: #1e2a4a; vertical-align: middle; }
+  .users-table tbody tr:last-child td { border-bottom: none; }
+  .users-table tbody tr:hover { background: rgba(59,130,246,.04); }
+  .table-member { display: flex; align-items: center; gap: 12px; }
+  .table-avatar { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg,#3b82f6,#6366f1); display: flex; align-items: center; justify-content: center; font-size: .95rem; font-weight: 700; color: #fff; text-transform: uppercase; flex-shrink: 0; }
+  .table-points { font-weight: 700; font-size: 1.05rem; background: linear-gradient(135deg,#3b82f6,#6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .table-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tbl-bill { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25); color: #3b82f6; font-size: .75rem; font-weight: 600; font-family: 'Poppins',sans-serif; border-radius: 8px; padding: 5px 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all .2s; }
+  .tbl-bill:hover { background: rgba(59,130,246,.2); color: #1d4ed8; transform: translateY(-1px); }
+  .tbl-adjust { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25); color: #059669; font-size: .75rem; font-weight: 600; font-family: 'Poppins',sans-serif; border-radius: 8px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all .2s; }
+  .tbl-adjust:hover { background: rgba(16,185,129,.2); color: #047857; transform: translateY(-1px); }
+  .tbl-notify { background: rgba(37,211,102,.1); border: 1px solid rgba(37,211,102,.3); color: #15803d; font-size: .75rem; font-weight: 600; font-family: 'Poppins',sans-serif; border-radius: 8px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all .2s; }
+  .tbl-notify:hover { background: rgba(37,211,102,.2); color: #166534; transform: translateY(-1px); }
 
-  .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-  }
+  .users-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 20px; }
+  .user-card { background: rgba(255,255,255,.55); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 20px; padding: 24px; box-shadow: 0 8px 28px rgba(59,130,246,.12); transition: transform .2s,box-shadow .2s; position: relative; overflow: hidden; }
+  .user-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#3b82f6,#6366f1); opacity:0; transition:opacity .2s; }
+  .user-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(59,130,246,.22); }
+  .user-card:hover::before { opacity:1; }
+  .card-top { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .avatar { width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#3b82f6,#6366f1); display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; color:#fff; text-transform:uppercase; flex-shrink:0; }
+  .user-name { font-size:1rem; font-weight:600; color:#1e2a4a; }
+  .user-role { font-size:.75rem; color:#8493b0; margin-top:1px; }
+  .points-section { background:rgba(59,130,246,.06); border:1px solid rgba(59,130,246,.12); border-radius:12px; padding:14px 16px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+  .points-label { font-size:.78rem; color:#8493b0; text-transform:uppercase; letter-spacing:.8px; }
+  .points-value { font-size:1.6rem; font-weight:700; background:linear-gradient(135deg,#3b82f6,#6366f1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; }
+  .card-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn-card-bill { flex:1; background:rgba(59,130,246,.1); border:1px solid rgba(59,130,246,.25); color:#3b82f6; font-size:.78rem; font-weight:600; font-family:'Poppins',sans-serif; border-radius:10px; padding:7px 10px; text-align:center; text-decoration:none; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .btn-card-bill:hover { background:rgba(59,130,246,.2); color:#1d4ed8; transform:translateY(-1px); }
+  .btn-card-adjust { flex:1; background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25); color:#059669; font-size:.78rem; font-weight:600; font-family:'Poppins',sans-serif; border-radius:10px; padding:7px 10px; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .btn-card-adjust:hover { background:rgba(16,185,129,.2); color:#047857; transform:translateY(-1px); }
+  .btn-card-notify { flex:1; background:rgba(37,211,102,.1); border:1px solid rgba(37,211,102,.3); color:#15803d; font-size:.78rem; font-weight:600; font-family:'Poppins',sans-serif; border-radius:10px; padding:7px 10px; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .btn-card-notify:hover { background:rgba(37,211,102,.2); color:#166534; transform:translateY(-1px); }
 
-  .page-title .title-icon {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-  }
+  .modal-content { background:rgba(255,255,255,.92); backdrop-filter:blur(24px) saturate(160%); border:1px solid rgba(255,255,255,.7); border-radius:20px; box-shadow:0 12px 48px rgba(59,130,246,.2); }
+  .modal-header { border-bottom:1px solid rgba(59,130,246,.1); }
+  .modal-footer { border-top:1px solid rgba(59,130,246,.1); }
+  .modal-title { font-weight:700; color:#1e2a4a; font-size:1.1rem; }
+  .modal-member { font-size:.85rem; color:#7e8cab; margin-bottom:16px; }
+  .glass-input-modal { width:100%; background:rgba(255,255,255,.7); border:1px solid rgba(59,130,246,.2); border-radius:10px; padding:10px 14px; font-family:'Poppins',sans-serif; font-size:.9rem; color:#1e2a4a; outline:none; margin-bottom:14px; box-sizing:border-box; }
+  .glass-input-modal:focus { border-color:rgba(59,130,246,.5); box-shadow:0 0 0 3px rgba(59,130,246,.12); }
+  .glass-textarea-modal { width:100%; background:rgba(255,255,255,.7); border:1px solid rgba(59,130,246,.2); border-radius:10px; padding:10px 14px; font-family:'Poppins',sans-serif; font-size:.88rem; color:#1e2a4a; outline:none; resize:vertical; box-sizing:border-box; }
+  .glass-textarea-modal:focus { border-color:rgba(59,130,246,.5); box-shadow:0 0 0 3px rgba(59,130,246,.12); }
 
-  .page-subtitle {
-    color: rgba(255,255,255,0.45);
-    font-size: 0.88rem;
-    margin-left: 54px;
-  }
+  .empty-state { text-align:center; padding:80px 20px; }
+  .empty-icon { font-size:3.5rem; margin-bottom:20px; color:#b9c7e8; }
+  .empty-title { font-size:1.2rem; font-weight:600; color:#48557a; margin-bottom:8px; }
+  .empty-sub { font-size:.85rem; color:#8493b0; }
 
-  /* ── User cards grid ── */
-  .users-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-
-  .user-card {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 24px;
-    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .user-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .user-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.18);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
-  }
-
-  .user-card:hover::before { opacity: 1; }
-
-  .card-top {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
-    flex-shrink: 0;
-  }
-
-  .user-info { flex: 1; min-width: 0; }
-
-  .user-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .user-role {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    margin-top: 1px;
-  }
-
-  .points-section {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .points-label {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-
-  .points-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-  }
-
-  .points-icon {
-    font-size: 1.4rem;
-    opacity: 0.3;
-  }
-
-  .card-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .btn-card-update {
-    flex: 1;
-    background: rgba(52, 211, 153, 0.12);
-    border: 1px solid rgba(52, 211, 153, 0.25);
-    color: #34d399;
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 10px;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .btn-card-update:hover {
-    background: rgba(52, 211, 153, 0.22);
-    border-color: rgba(52, 211, 153, 0.5);
-    color: #6ee7b7;
-    transform: translateY(-1px);
-  }
-
-  .btn-card-delete {
-    flex: 1;
-    background: rgba(248, 113, 113, 0.12);
-    border: 1px solid rgba(248, 113, 113, 0.25);
-    color: #f87171;
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 10px;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .btn-card-delete:hover {
-    background: rgba(248, 113, 113, 0.22);
-    border-color: rgba(248, 113, 113, 0.5);
-    color: #fca5a5;
-    transform: translateY(-1px);
-  }
-
-  .btn-card-disabled {
-    flex: 1;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.2);
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 10px;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    cursor: not-allowed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  /* ── Empty state ── */
-  .empty-state {
-    text-align: center;
-    padding: 80px 20px;
-  }
-
-  .empty-icon {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    opacity: 0.3;
-  }
-
-  .empty-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 8px;
-  }
-
-  .empty-sub {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.3);
-  }
-
-  .btn-add-first {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    border: none;
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border-radius: 12px;
-    padding: 10px 24px;
-    text-decoration: none;
-    margin-top: 20px;
-    transition: opacity 0.2s, transform 0.15s;
-  }
-  .btn-add-first:hover { opacity: 0.85; transform: translateY(-1px); color: #fff; }
-
-  /* Stats bar */
-  .stats-bar {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
-
-  .stat-chip {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 10px 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .stat-chip-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-  }
-
-  .stat-chip-val {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  .stat-chip-lbl {
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+  @media (max-width:640px) {
+    .users-table thead { display:none; }
+    .users-table, .users-table tbody, .users-table tr, .users-table td { display:block; width:100%; }
+    .users-table tr { padding:10px 4px; border-bottom:1px solid rgba(59,130,246,.12); }
+    .users-table tbody tr:last-child { border-bottom:none; }
+    .users-table td { padding:6px 18px; border:none; }
+    .table-actions { flex-wrap:wrap; }
   }
 </style>
 {% endblock style %}
@@ -311,69 +85,103 @@
 <div class="page-wrapper">
   <div class="container-fluid px-2 px-md-3">
 
-    <div class="page-header">
-      <div class="page-title">
-        <div class="title-icon"><i class="fas fa-users"></i></div>
-        User Dashboard
-      </div>
-      <div class="page-subtitle">Manage member reward points</div>
+    <div class="page-title">
+      <div class="title-icon"><i class="fas fa-users"></i></div>
+      Member Dashboard
     </div>
+    <div class="page-subtitle">Manage procurement bills and reward points</div>
 
     {% if points %}
     <div class="stats-bar">
       <div class="stat-chip">
-        <div class="stat-chip-icon" style="background:rgba(96,165,250,0.15);">
-          <i class="fas fa-users" style="color:#60a5fa;"></i>
-        </div>
-        <div>
-          <div class="stat-chip-val">{{ points|length }}</div>
-          <div class="stat-chip-lbl">Total Members</div>
-        </div>
+        <div class="stat-chip-icon" style="background:rgba(59,130,246,.15);"><i class="fas fa-users" style="color:#3b82f6;"></i></div>
+        <div><div class="stat-chip-val">{{ points|length }}</div><div class="stat-chip-lbl">Members</div></div>
       </div>
-      <a href="/addpoint" style="text-decoration:none;">
-        <div class="stat-chip" style="cursor:pointer; border-color:rgba(96,165,250,0.25);">
-          <div class="stat-chip-icon" style="background:linear-gradient(135deg,#60a5fa,#a78bfa);">
-            <i class="fas fa-plus" style="color:#fff;"></i>
-          </div>
-          <div>
-            <div class="stat-chip-val" style="font-size:0.9rem; color:#60a5fa;">Add Points</div>
-            <div class="stat-chip-lbl">Award a member</div>
-          </div>
+      <a href="{% url 'create_user' %}" style="text-decoration:none;">
+        <div class="stat-chip" style="cursor:pointer;border-color:rgba(59,130,246,.3);">
+          <div class="stat-chip-icon" style="background:linear-gradient(135deg,#3b82f6,#6366f1);"><i class="fas fa-user-plus" style="color:#fff;"></i></div>
+          <div><div class="stat-chip-val" style="font-size:.9rem;color:#3b82f6;">Add Member</div><div class="stat-chip-lbl">Create account</div></div>
         </div>
       </a>
+      <a href="{% url 'billing:bill_list' %}" style="text-decoration:none;">
+        <div class="stat-chip" style="cursor:pointer;border-color:rgba(99,102,241,.3);">
+          <div class="stat-chip-icon" style="background:rgba(99,102,241,.15);"><i class="fas fa-file-invoice" style="color:#6366f1;"></i></div>
+          <div><div class="stat-chip-val" style="font-size:.9rem;color:#6366f1;">Bill History</div><div class="stat-chip-lbl">All records</div></div>
+        </div>
+      </a>
+      <div class="view-toggle" role="group">
+        <button type="button" id="btn-table-view" class="active" onclick="setView('table')"><i class="fas fa-table-list"></i> Table</button>
+        <button type="button" id="btn-card-view" onclick="setView('cards')"><i class="fas fa-th-large"></i> Cards</button>
+      </div>
     </div>
 
-    <div class="users-grid">
+    <div class="users-table-wrap" id="tableView">
+      <table class="users-table">
+        <thead>
+          <tr><th>Member</th><th>Mobile</th><th>Points</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for i in points %}
+          <tr>
+            <td>
+              <div class="table-member">
+                <div class="table-avatar">{{ i.username|first }}</div>
+                <div>
+                  <div style="font-weight:600;">{{ i.first_name|default:'' }} {{ i.last_name|default:'' }}</div>
+                  <div style="font-size:.75rem;color:#8493b0;">@{{ i.username }}</div>
+                </div>
+              </div>
+            </td>
+            <td style="color:#7e8cab;">{{ i.mobile|default:"—" }}</td>
+            <td><span class="table-points">{% if i.total_points %}{{ i.total_points }}{% else %}0{% endif %}</span></td>
+            <td>
+              <div class="table-actions">
+                <a href="{% url 'billing:bill_create' i.id %}" class="tbl-bill"><i class="fas fa-receipt"></i> Bill</a>
+                <button type="button" class="tbl-adjust"
+                  data-user-id="{{ i.id }}"
+                  data-user-name="{{ i.first_name|default:i.username }}"
+                  onclick="openAdjust(this)"><i class="fas fa-sliders"></i> Adjust</button>
+                <button type="button" class="tbl-notify"
+                  data-name="{{ i.first_name|default:i.username }}"
+                  data-points="{% if i.total_points %}{{ i.total_points }}{% else %}0{% endif %}"
+                  data-mobile="{{ i.mobile|default:'' }}"
+                  onclick="openNotify(this)"><i class="fab fa-whatsapp"></i> Notify</button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="users-grid is-hidden" id="cardsView">
       {% for i in points %}
       <div class="user-card">
         <div class="card-top">
           <div class="avatar">{{ i.username|first }}</div>
-          <div class="user-info">
-            <div class="user-name">{{ i.username }}</div>
-            <div class="user-role">Rewards Member</div>
+          <div>
+            <div class="user-name">{{ i.first_name|default:'' }} {{ i.last_name|default:i.username }}</div>
+            <div class="user-role">@{{ i.username }} · {{ i.mobile|default:"no phone" }}</div>
           </div>
         </div>
-
         <div class="points-section">
           <div>
             <div class="points-label">Total Points</div>
             <div class="points-value">{% if i.total_points %}{{ i.total_points }}{% else %}0{% endif %}</div>
           </div>
-          <i class="fas fa-star points-icon" style="color:#a78bfa;"></i>
+          <i class="fas fa-star" style="font-size:1.4rem;opacity:.2;color:#6366f1;"></i>
         </div>
-
         <div class="card-actions">
-          {% if i.total_points is not none %}
-          <a href="{% url 'update_points' user_id=i.id username=i.username %}" class="btn-card-update">
-            <i class="fas fa-pen"></i> Update
-          </a>
-          <a href="{% url 'delete_points' user_id=i.id username=i.username %}" class="btn-card-delete">
-            <i class="fas fa-minus-circle"></i> Deduct
-          </a>
-          {% else %}
-          <span class="btn-card-disabled"><i class="fas fa-pen"></i> Update</span>
-          <span class="btn-card-disabled"><i class="fas fa-minus-circle"></i> Deduct</span>
-          {% endif %}
+          <a href="{% url 'billing:bill_create' i.id %}" class="btn-card-bill"><i class="fas fa-receipt"></i> Bill</a>
+          <button type="button" class="btn-card-adjust"
+            data-user-id="{{ i.id }}"
+            data-user-name="{{ i.first_name|default:i.username }}"
+            onclick="openAdjust(this)"><i class="fas fa-sliders"></i> Adjust</button>
+          <button type="button" class="btn-card-notify"
+            data-name="{{ i.first_name|default:i.username }}"
+            data-points="{% if i.total_points %}{{ i.total_points }}{% else %}0{% endif %}"
+            data-mobile="{{ i.mobile|default:'' }}"
+            onclick="openNotify(this)"><i class="fab fa-whatsapp"></i> Notify</button>
         </div>
       </div>
       {% endfor %}
@@ -382,17 +190,108 @@
     {% else %}
     <div class="empty-state">
       <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
-      <div class="empty-title">No members found</div>
-      <div class="empty-sub">Register users or try a different search</div>
-      <a href="/addpoint" class="btn-add-first"><i class="fas fa-plus"></i>Add First Points</a>
+      <div class="empty-title">No members yet</div>
+      <div class="empty-sub">Add your first member to get started</div>
+      <a href="{% url 'create_user' %}" class="btn-primary-glass mt-3 d-inline-flex"><i class="fas fa-user-plus me-1"></i>Add First Member</a>
     </div>
     {% endif %}
 
   </div>
 </div>
+
+<!-- Adjust Modal -->
+<div class="modal fade" id="adjustModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-sliders me-2" style="color:#059669;"></i>Adjust Points</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" id="adjustForm">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p class="modal-member" id="adjustMemberName"></p>
+          <label style="font-size:.82rem;font-weight:600;color:#5a6a8a;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Points (negative to deduct)</label>
+          <input type="number" name="delta" class="glass-input-modal" placeholder="e.g. 50 or -20" required>
+          <label style="font-size:.82rem;font-weight:600;color:#5a6a8a;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Reason</label>
+          <input type="text" name="reason" class="glass-input-modal" maxlength="200" placeholder="e.g. Loyalty bonus" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn-primary-glass">Save Adjustment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Notify Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fab fa-whatsapp me-2" style="color:#25d366;"></i>WhatsApp Notify</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-member" id="notifyMemberName"></p>
+        <label style="font-size:.82rem;font-weight:600;color:#5a6a8a;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Message (editable)</label>
+        <textarea id="notifyMessage" class="glass-textarea-modal" rows="5"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn-success-glass" id="openWaBtn"><i class="fab fa-whatsapp me-1"></i>Open WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="hidden" id="waTemplateBody" value="{{ wa_template_body }}">
+
+<script>
+  var _notifyMobile = '';
+
+  function openAdjust(btn) {
+    document.getElementById('adjustMemberName').textContent = 'Member: ' + btn.dataset.userName;
+    document.getElementById('adjustForm').action = '/billing/adjust/' + btn.dataset.userId + '/';
+    new bootstrap.Modal(document.getElementById('adjustModal')).show();
+  }
+
+  function openNotify(btn) {
+    _notifyMobile = btn.dataset.mobile;
+    var tmpl = document.getElementById('waTemplateBody').value;
+    var msg = tmpl.replace('{name}', btn.dataset.name).replace('{points}', btn.dataset.points).replace('{amount}', '');
+    document.getElementById('notifyMemberName').textContent = 'To: ' + btn.dataset.name + ' (+91' + _notifyMobile + ')';
+    document.getElementById('notifyMessage').value = msg;
+    new bootstrap.Modal(document.getElementById('notifyModal')).show();
+  }
+
+  document.getElementById('openWaBtn').addEventListener('click', function () {
+    var url = 'https://wa.me/91' + _notifyMobile + '?text=' + encodeURIComponent(document.getElementById('notifyMessage').value);
+    window.open(url, '_blank');
+  });
+
+  function setView(view) {
+    var cards = document.getElementById('cardsView');
+    var table = document.getElementById('tableView');
+    if (!cards || !table) return;
+    var showTable = view !== 'cards';
+    table.classList.toggle('is-hidden', !showTable);
+    cards.classList.toggle('is-hidden', showTable);
+    document.getElementById('btn-table-view').classList.toggle('active', showTable);
+    document.getElementById('btn-card-view').classList.toggle('active', !showTable);
+    try { localStorage.setItem('dashboardView', showTable ? 'table' : 'cards'); } catch(e){}
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var saved = 'table';
+    try { saved = localStorage.getItem('dashboardView') || 'table'; } catch(e){}
+    setView(saved);
+  });
+</script>
 {% else %}
-<div style="text-align:center; padding:80px 20px; color:rgba(255,255,255,0.5);">
-  Please <a href="{% url 'login' %}" style="color:#60a5fa;">log in</a> to continue.
+<div style="text-align:center;padding:80px 20px;color:#7e8cab;">
+  Please <a href="{% url 'login' %}" style="color:#3b82f6;">log in</a> to continue.
 </div>
 {% endif %}
 {% endblock content %}
