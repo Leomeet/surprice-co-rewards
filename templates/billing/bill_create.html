@@ -87,31 +87,76 @@
   </div>
 </div>
 
+{{ products_json|json_script:"products-data" }}
 <script>
-const PRODUCTS = {{ products_json|safe }};
+const PRODUCTS = JSON.parse(document.getElementById('products-data').textContent);
 const productMap = {};
 PRODUCTS.forEach(p => { productMap[p.id] = p; });
 
 function buildSelect() {
-  let opts = '<option value="">— select product —</option>';
+  const sel = document.createElement('select');
+  sel.name = 'product_id';
+  sel.className = 'glass-select';
+  sel.required = true;
+  sel.addEventListener('change', function () { recalc(this.closest('tr')); });
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '— select product —';
+  sel.appendChild(placeholder);
   PRODUCTS.forEach(p => {
-    opts += `<option value="${p.id}">${p.name} (₹${p.price.toFixed(2)}, ${p.point_value} pts)</option>`;
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + ' (₹' + p.price.toFixed(2) + ', ' + p.point_value + ' pts)';
+    sel.appendChild(opt);
   });
-  return `<select name="product_id" class="glass-select" onchange="recalc(this.closest('tr'))" required>${opts}</select>`;
+  return sel;
 }
 
 function addRow() {
   const tbody = document.getElementById('itemsBody');
   const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td>${buildSelect()}</td>
-    <td><input type="number" name="quantity" class="glass-qty" value="1" min="1" oninput="recalc(this.closest('tr'))" required></td>
-    <td class="line-unit-price">—</td>
-    <td class="line-unit-pts">—</td>
-    <td class="line-val line-amount">₹0.00</td>
-    <td class="line-val line-points">0 pts</td>
-    <td><button type="button" class="btn-remove" onclick="removeRow(this)"><i class="fas fa-times"></i></button></td>
-  `;
+
+  const tdSel = document.createElement('td');
+  tdSel.appendChild(buildSelect());
+
+  const qtyInput = document.createElement('input');
+  qtyInput.type = 'number';
+  qtyInput.name = 'quantity';
+  qtyInput.className = 'glass-qty';
+  qtyInput.value = '1';
+  qtyInput.min = '1';
+  qtyInput.required = true;
+  qtyInput.addEventListener('input', function () { recalc(this.closest('tr')); });
+  const tdQty = document.createElement('td');
+  tdQty.appendChild(qtyInput);
+
+  const tdUnitPrice = document.createElement('td');
+  tdUnitPrice.className = 'line-unit-price';
+  tdUnitPrice.textContent = '—';
+
+  const tdUnitPts = document.createElement('td');
+  tdUnitPts.className = 'line-unit-pts';
+  tdUnitPts.textContent = '—';
+
+  const tdAmt = document.createElement('td');
+  tdAmt.className = 'line-val line-amount';
+  tdAmt.textContent = '₹0.00';
+
+  const tdPts = document.createElement('td');
+  tdPts.className = 'line-val line-points';
+  tdPts.textContent = '0 pts';
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'btn-remove';
+  removeBtn.addEventListener('click', function () { removeRow(this); });
+  const icon = document.createElement('i');
+  icon.className = 'fas fa-times';
+  removeBtn.appendChild(icon);
+  const tdRemove = document.createElement('td');
+  tdRemove.appendChild(removeBtn);
+
+  [tdSel, tdQty, tdUnitPrice, tdUnitPts, tdAmt, tdPts, tdRemove].forEach(td => tr.appendChild(td));
   tbody.appendChild(tr);
   updateTotals();
 }
