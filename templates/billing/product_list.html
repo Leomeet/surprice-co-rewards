@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block style %}
+<style>
+  .page-wrapper { padding: 40px 20px 60px; min-height: calc(100vh - 60px); }
+  .page-title { font-size: 1.75rem; font-weight: 700; color: #1e2a4a; display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .title-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #3b82f6, #6366f1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; flex-shrink: 0; box-shadow: 0 6px 18px rgba(59,130,246,.35); }
+  .page-subtitle { color: #7e8cab; font-size: .88rem; margin-left: 54px; margin-bottom: 28px; }
+  .tbl-wrap { background: rgba(255,255,255,.55); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 20px; box-shadow: 0 8px 28px rgba(59,130,246,.12); overflow: hidden; }
+  .prod-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  .prod-table thead th { padding: 16px 20px; font-size: .72rem; text-transform: uppercase; letter-spacing: .6px; color: #8493b0; font-weight: 600; background: rgba(59,130,246,.05); border-bottom: 1px solid rgba(59,130,246,.1); text-align: left; }
+  .prod-table tbody td { padding: 14px 20px; border-bottom: 1px solid rgba(59,130,246,.07); color: #1e2a4a; vertical-align: middle; }
+  .prod-table tbody tr:last-child td { border-bottom: none; }
+  .prod-table tbody tr:hover { background: rgba(59,130,246,.04); }
+  .btn-sm-edit { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25); color: #3b82f6; font-size: .78rem; font-weight: 600; font-family: 'Poppins',sans-serif; border-radius: 8px; padding: 5px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all .2s; }
+  .btn-sm-edit:hover { background: rgba(59,130,246,.2); color: #1d4ed8; }
+  .btn-sm-del { background: rgba(244,63,94,.1); border: 1px solid rgba(244,63,94,.25); color: #e11d48; font-size: .78rem; font-weight: 600; font-family: 'Poppins',sans-serif; border-radius: 8px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 5px; transition: all .2s; cursor: pointer; }
+  .btn-sm-del:hover { background: rgba(244,63,94,.2); color: #be123c; }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container-fluid px-2 px-md-3">
+    <div class="d-flex align-items-start justify-content-between mb-2">
+      <div>
+        <div class="page-title"><div class="title-icon"><i class="fas fa-box"></i></div>Products</div>
+        <div class="page-subtitle">Manage your product catalogue</div>
+      </div>
+      <a href="{% url 'billing:product_create' %}" class="btn-primary-glass mt-1"><i class="fas fa-plus me-1"></i>Add Product</a>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="prod-table">
+        <thead>
+          <tr><th>Name</th><th>Description</th><th>Price (₹)</th><th>Points/unit</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td><strong>{{ p.name }}</strong></td>
+            <td style="color:#7e8cab;">{{ p.description|default:"—" }}</td>
+            <td>₹{{ p.price }}</td>
+            <td><span style="font-weight:700;color:#6366f1;">{{ p.point_value }}</span></td>
+            <td>
+              <div style="display:flex;gap:8px;">
+                <a href="{% url 'billing:product_edit' p.pk %}" class="btn-sm-edit"><i class="fas fa-pen"></i> Edit</a>
+                <form method="POST" action="{% url 'billing:product_delete' p.pk %}" style="display:inline;" onsubmit="return confirm('Delete {{ p.name }}?')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-sm-del"><i class="fas fa-trash"></i> Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" style="text-align:center;padding:40px;color:#8493b0;">No products yet. <a href="{% url 'billing:product_create' %}">Add one.</a></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
