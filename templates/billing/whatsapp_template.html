@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block style %}
+<style>
+  .form-page { min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+  .form-card { background:rgba(255,255,255,.55); backdrop-filter:blur(24px) saturate(160%); border:1px solid rgba(255,255,255,.7); border-radius:24px; padding:40px; width:100%; max-width:560px; box-shadow:0 12px 48px rgba(59,130,246,.15); }
+  .form-title { font-size:1.3rem; font-weight:700; color:#1e2a4a; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .form-title i { color:#25d366; }
+  .hint { font-size:.82rem; color:#8493b0; margin-bottom:24px; }
+  .hint code { background:rgba(59,130,246,.08); border-radius:5px; padding:2px 6px; color:#3b82f6; font-size:.8rem; }
+  .glass-textarea { width:100%; background:rgba(255,255,255,.6); border:1px solid rgba(59,130,246,.2); border-radius:10px; padding:12px 14px; font-family:'Poppins',sans-serif; font-size:.9rem; color:#1e2a4a; outline:none; resize:vertical; box-sizing:border-box; }
+  .glass-textarea:focus { border-color:rgba(59,130,246,.5); box-shadow:0 0 0 3px rgba(59,130,246,.12); }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-title"><i class="fab fa-whatsapp"></i>WhatsApp Message Template</div>
+    <div class="hint">
+      Use <code>{name}</code> for member's name, <code>{points}</code> for current points, <code>{amount}</code> for bill total.
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <div style="margin-bottom:20px;">
+        <label style="font-size:.82rem;font-weight:600;color:#5a6a8a;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px;">Message Template</label>
+        <textarea name="body" class="glass-textarea" rows="6">{{ form.body.value }}</textarea>
+        {% if form.body.errors %}<div style="color:#e11d48;font-size:.8rem;margin-top:4px;">{{ form.body.errors.0 }}</div>{% endif %}
+      </div>
+      <button type="submit" class="btn-primary-glass"><i class="fas fa-check me-1"></i>Save Template</button>
+    </form>
+  </div>
+</div>
+{% endblock content %}
