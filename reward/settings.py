@@ -60,13 +60,22 @@ WSGI_APPLICATION = 'reward.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=DATABASE_URL,
         conn_max_age=600,
         ssl_require=True,
     )
 }
+
+# The Supabase transaction pooler (port 6543, used on serverless/Vercel) runs
+# pgbouncer in transaction mode: connections must not persist between requests
+# and server-side cursors are unsupported. Detect it and configure accordingly.
+if DATABASE_URL and ':6543' in DATABASE_URL:
+    DATABASES['default']['CONN_MAX_AGE'] = 0
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
 
 STATICFILES_DIRS = (
