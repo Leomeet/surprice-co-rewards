@@ -13,6 +13,22 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*", ".vercel.app"]
 
+# Vercel terminates TLS at its edge and proxies to this function over HTTP, so
+# Django must (1) trust the X-Forwarded-Proto header to know the request is
+# HTTPS, and (2) trust the HTTPS origin for CSRF checks on POST forms.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Trust only this deployment's own hostnames, which Vercel injects at runtime
+# (not the whole *.vercel.app zone), plus any custom domains set via env var.
+CSRF_TRUSTED_ORIGINS = [
+    f'https://{os.environ[_v]}'
+    for _v in ('VERCEL_PROJECT_PRODUCTION_URL', 'VERCEL_URL')
+    if os.environ.get(_v)
+]
+_extra_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if _extra_csrf_origins:
+    CSRF_TRUSTED_ORIGINS += [o.strip() for o in _extra_csrf_origins.split(',') if o.strip()]
+
 
 # Application definition
 
