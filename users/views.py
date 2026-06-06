@@ -164,8 +164,26 @@ def delete_points(request, user_id, username):
                     send_api_request(destination="+91"+user_object.mobile,campaign='surprise rewards delete',parameters=[str(user_object.username),str(new_points),str(user_points.total_points)])
 
                     user_points.save()
-                    return redirect('home')  
+                    return redirect('home')
         form = UpdatePointsForm(instance=user_points)
         return render(request, 'delete_points.html', {'form': form, 'username': username, 'error_message': error_message})
     else:
         return redirect('login')
+
+def create_user(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('home')
+    from .forms import CreateUserForm
+    form = CreateUserForm(request.POST or None)
+    if form.is_valid():
+        user = CustomUser(
+            username=form.cleaned_data['username'],
+            first_name=form.cleaned_data['first_name'],
+            last_name=form.cleaned_data.get('last_name', ''),
+            mobile=form.cleaned_data['mobile'],
+        )
+        user.set_password(form.cleaned_data['password'])
+        user.save()
+        Points.objects.create(host=user, total_points=form.cleaned_data['initial_points'])
+        return redirect('home')
+    return render(request, 'create_user.html', {'form': form})

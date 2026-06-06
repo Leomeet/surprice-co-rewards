@@ -9,5 +9,6 @@ urlpatterns = [
     path('addpoint/',views.add_point, name='addpoint'),
     path('update_points/<int:user_id>/<str:username>/', views.update_points, name='update_points'),
     path('delete_points/<int:user_id>/<str:username>/', views.delete_points, name='delete_points'),
+    path('users/create/', views.create_user, name='create_user'),
 
 ]
