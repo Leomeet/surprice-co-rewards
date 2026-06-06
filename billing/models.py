@@ -1,28 +1,11 @@
-from decimal import Decimal
 from django.db import models
 from django.conf import settings
-
-
-class CoercingDecimalField(models.DecimalField):
-    """DecimalField that coerces values to Decimal on model attribute assignment."""
-
-    from_db_value = models.DecimalField.to_python
-
-    def contribute_to_class(self, cls, name, **kwargs):
-        super().contribute_to_class(cls, name, **kwargs)
-        field = self
-
-        class CoercingDescriptor(models.fields.DeferredAttribute):
-            def __set__(self, instance, value):
-                instance.__dict__[self.field.attname] = field.to_python(value)
-
-        setattr(cls, self.attname, CoercingDescriptor(self))
 
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    price = CoercingDecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     point_value = models.IntegerField()
 
     class Meta:

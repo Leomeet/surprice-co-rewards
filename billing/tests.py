@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from billing.models import Product, Bill, BillItem, PointAdjustment, WhatsAppTemplate
@@ -9,7 +10,8 @@ User = get_user_model()
 class ProductModelTest(TestCase):
     def test_product_fields_exist(self):
         p = Product.objects.create(name='Gold Wash', price='150.00', point_value=75)
-        self.assertEqual(p.price, 150)
+        p.refresh_from_db()
+        self.assertEqual(p.price, Decimal('150.00'))
         self.assertEqual(p.point_value, 75)
         self.assertEqual(p.description, '')
 
