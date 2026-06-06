@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block style %}
+<style>
+  .page-wrapper { padding: 40px 20px 60px; min-height: calc(100vh - 60px); }
+  .page-title { font-size:1.5rem; font-weight:700; color:#1e2a4a; display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+  .title-icon { width:42px; height:42px; background:linear-gradient(135deg,#3b82f6,#6366f1); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1rem; }
+  .page-subtitle { color:#7e8cab; font-size:.88rem; margin-left:54px; margin-bottom:28px; }
+  .detail-card { background:rgba(255,255,255,.55); backdrop-filter:blur(20px) saturate(160%); border:1px solid rgba(255,255,255,.7); border-radius:20px; padding:28px; box-shadow:0 8px 28px rgba(59,130,246,.12); margin-bottom:20px; }
+  .meta-row { display:flex; gap:32px; flex-wrap:wrap; margin-bottom:20px; }
+  .meta-item label { font-size:.7rem; text-transform:uppercase; letter-spacing:.6px; color:#8493b0; display:block; margin-bottom:2px; }
+  .meta-item span { font-weight:600; color:#1e2a4a; }
+  .items-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+  .items-table th { padding:12px 16px; font-size:.7rem; text-transform:uppercase; letter-spacing:.6px; color:#8493b0; font-weight:600; background:rgba(59,130,246,.04); border-bottom:1px solid rgba(59,130,246,.1); text-align:left; }
+  .items-table td { padding:12px 16px; border-bottom:1px solid rgba(59,130,246,.07); color:#1e2a4a; }
+  .items-table tbody tr:last-child td { border-bottom:none; }
+  .items-table tfoot td { padding:14px 16px; font-weight:700; background:rgba(59,130,246,.05); color:#1e2a4a; }
+  .pts { color:#6366f1; font-weight:700; }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container-fluid px-2 px-md-3" style="max-width:820px;">
+    <a href="{% url 'billing:bill_list' %}" style="font-size:.85rem;color:#3b82f6;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;"><i class="fas fa-arrow-left"></i> Back to Bills</a>
+    <div class="page-title"><div class="title-icon"><i class="fas fa-receipt"></i></div>Bill #{{ bill.pk }}</div>
+    <div class="page-subtitle">{{ bill.created_at|date:"d M Y, H:i" }}</div>
+
+    <div class="detail-card">
+      <div class="meta-row">
+        <div class="meta-item"><label>Member</label><span>{{ bill.user.first_name|default:bill.user.username }} {{ bill.user.last_name }}</span></div>
+        <div class="meta-item"><label>Username</label><span>@{{ bill.user.username }}</span></div>
+        <div class="meta-item"><label>Date</label><span>{{ bill.created_at|date:"d M Y" }}</span></div>
+        <div class="meta-item"><label>Time</label><span>{{ bill.created_at|time:"H:i" }}</span></div>
+        {% if bill.note %}<div class="meta-item"><label>Note</label><span>{{ bill.note }}</span></div>{% endif %}
+      </div>
+
+      <table class="items-table">
+        <thead>
+          <tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Unit Points</th><th>Line Amount</th><th>Line Points</th></tr>
+        </thead>
+        <tbody>
+          {% for item in bill.items.all %}
+          <tr>
+            <td><strong>{{ item.product.name|default:"(deleted)" }}</strong></td>
+            <td>{{ item.quantity }}</td>
+            <td>&#8377;{{ item.unit_price }}</td>
+            <td class="pts">{{ item.unit_points }}</td>
+            <td>&#8377;{{ item.line_total_amount }}</td>
+            <td class="pts">{{ item.line_total_points }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" style="text-align:right;">Grand Total</td>
+            <td>&#8377;{{ bill.total_amount }}</td>
+            <td class="pts">{{ bill.total_points }} pts</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
