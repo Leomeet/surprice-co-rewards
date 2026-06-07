@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F
 from decimal import Decimal
-import json
 
 from .models import Product, Bill, BillItem, PointAdjustment, WhatsAppTemplate
 from .forms import ProductForm, PointAdjustmentForm, WhatsAppTemplateForm
@@ -61,10 +60,10 @@ def product_delete(request, pk):
 def bill_create(request, user_id):
     member = get_object_or_404(CustomUser, pk=user_id, is_superuser=False)
     products = Product.objects.all()
-    products_json = json.dumps(
-        [{'id': p.pk, 'name': p.name, 'price': float(p.price), 'point_value': p.point_value}
-         for p in products]
-    )
+    products_data = [
+        {'id': p.pk, 'name': p.name, 'price': float(p.price), 'point_value': p.point_value}
+        for p in products
+    ]
 
     if request.method == 'POST':
         product_ids = request.POST.getlist('product_id')
@@ -114,7 +113,7 @@ def bill_create(request, user_id):
     return render(request, 'billing/bill_create.html', {
         'member': member,
         'products': products,
-        'products_json': products_json,
+        'products_data': products_data,
     })
 
 

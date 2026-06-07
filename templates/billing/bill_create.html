@@ -87,7 +87,7 @@
   </div>
 </div>
 
-{{ products_json|json_script:"products-data" }}
+{{ products_data|json_script:"products-data" }}
 <script>
 const PRODUCTS = JSON.parse(document.getElementById('products-data').textContent);
 const productMap = {};
